@@ -27,3 +27,7 @@ td, th {
 tbody tr:nth-child(odd) {
   background-color: #dddddd;
 }
+
+.line-through {
+  text-decoration: line-through;
+}

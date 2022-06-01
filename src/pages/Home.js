@@ -140,7 +140,7 @@ function Home() {
             <th>Expected Date</th>
             <th>Completed Date</th>
             <th>Priority</th>
-            <th>Operations</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>

@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { orderBy } from "firebase/firestore";
 import LogoutBtn from "../components/LogoutBtn";
+import Alert from "../components/Alert";
 
 function Home() {
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ function Home() {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [incompletedTasks, setIncompletedTasks] = useState([]);
-  const [displayTasks, setDisplayTasks] = useState([]);
   const [activeLink, setActiveLink] = useState("all");
+  const [isAlert, setIsAlert] = useState(false);
 
   useEffect(() => {
     const q = query(collection(db, "tasks"), orderBy("expected_date", "asc"));
@@ -29,16 +30,18 @@ function Home() {
         arr.push({ ...doc.data(), id: doc.id });
       });
       setTasks(arr);
+      setCompletedTasks(arr.filter((item) => item.is_completed === true));
+      setIncompletedTasks(arr.filter((item) => item.is_completed === false));
 
-      if (activeLink === "all") {
-        setDisplayTasks(arr);
-      } else if (activeLink === "complete") {
-        const filteredTasks = arr.filter((item) => item.is_completed === true);
-        setDisplayTasks(filteredTasks);
-      } else if (activeLink === "incomplete") {
-        const filteredTasks = arr.filter((item) => item.is_completed === false);
-        setDisplayTasks(filteredTasks);
-      }
+      // if (activeLink === "all") {
+      //   setDisplayTasks(arr);
+      // } else if (activeLink === "complete") {
+      //   const filteredTasks = arr.filter((item) => item.is_completed === true);
+      //   setDisplayTasks(filteredTasks);
+      // } else if (activeLink === "incomplete") {
+      //   const filteredTasks = arr.filter((item) => item.is_completed === false);
+      //   setDisplayTasks(filteredTasks);
+      // }
     });
 
     return () => {
@@ -54,6 +57,8 @@ function Home() {
       is_completed: !item.is_completed,
       completed_date: !item.is_completed ? new Date() : "",
     });
+    !item.is_completed && setIsAlert(true);
+    !item.is_completed && setTimeout(() => setIsAlert(false), 2000);
   };
 
   const deleteTask = async (item) => {
@@ -70,15 +75,11 @@ function Home() {
 
   const changeLink = (data) => {
     setActiveLink(data);
-    // if (data === "all") {
-    //   setDisplayTasks(tasks);
-    // } else if (data === "complete") {
-    //   const arr = tasks.filter((item) => item.is_completed === true);
-    //   setDisplayTasks(arr);
-    // } else if (data === "incomplete") {
-    //   const arr = tasks.filter((item) => item.is_completed === false);
-    //   setDisplayTasks(arr);
-    // }
+  };
+
+  const remainTasks = (totalTasks) => {
+    if (totalTasks === 0) return "No task left";
+    return `${totalTasks} tasks`;
   };
 
   return (
@@ -103,6 +104,7 @@ function Home() {
           Add Task
         </button>
       </div>
+      {isAlert && <Alert />}
       <div className="btn-group" role="group" style={{ marginBottom: 8 }}>
         <button
           type="button"
@@ -132,9 +134,17 @@ function Home() {
           Incompleted Tasks
         </button>
       </div>{" "}
-      <h4 className="text-secondary">{displayTasks.length} tasks</h4>
+      <h4>
+        {remainTasks(
+          activeLink === "all"
+            ? tasks.length
+            : activeLink === "complete"
+            ? completedTasks.length
+            : incompletedTasks.length
+        )}
+      </h4>
       <table>
-        <thead>
+        <thead className="text-white" style={{ backgroundColor: "#0D6EFD" }}>
           <tr>
             <th>Title</th>
             <th>Expected Date</th>
@@ -144,40 +154,121 @@ function Home() {
           </tr>
         </thead>
         <tbody>
-          {displayTasks.map((item) => {
-            return (
-              <tr
-                key={item.id}
-                className={item.is_completed ? "line-through" : ""}
-              >
-                <td onClick={() => completeTask(item)}>
-                  <input
-                    type="checkbox"
-                    checked={item.is_completed}
-                    onChange={() => completeTask(item)}
-                  />
-                  {item.title}
-                </td>
-                <td>
-                  {new Date(
-                    item.expected_date.seconds * 1000
-                  ).toLocaleDateString("en-SG")}
-                </td>
-                <td>
-                  {item.completed_date
-                    ? new Date(
-                        item.completed_date.seconds * 1000
-                      ).toLocaleDateString("en-SG")
-                    : ""}
-                </td>
-                <td>{item.priority}</td>
-                <td>
-                  <button onClick={() => updateTask(item)}>Update</button>
-                  <button onClick={() => deleteTask(item)}>Delete</button>
-                </td>
-              </tr>
-            );
-          })}
+          {activeLink === "all"
+            ? tasks.map((item) => {
+                return (
+                  <tr
+                    key={item.id}
+                    className={item.is_completed ? "line-through" : ""}
+                  >
+                    <td onClick={() => completeTask(item)}>
+                      <input
+                        type="checkbox"
+                        checked={item.is_completed}
+                        onChange={() => completeTask(item)}
+                      />
+                      {item.title}
+                    </td>
+                    <td>
+                      {new Date(
+                        item.expected_date.seconds * 1000
+                      ).toLocaleDateString("en-SG")}
+                    </td>
+                    <td>
+                      {item.completed_date
+                        ? new Date(
+                            item.completed_date.seconds * 1000
+                          ).toLocaleDateString("en-SG")
+                        : ""}
+                    </td>
+                    <td>{item.priority}</td>
+                    <td>
+                      <button
+                        onClick={() => updateTask(item)}
+                        className="btn btn-outline-primary btn-sm"
+                        style={{ marginRight: 5 }}
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={() => deleteTask(item)}
+                        className="btn btn-outline-danger btn-sm"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+            : activeLink === "complete"
+            ? completedTasks.map((item) => {
+                return (
+                  <tr
+                    key={item.id}
+                    className={item.is_completed ? "line-through" : ""}
+                  >
+                    <td onClick={() => completeTask(item)}>
+                      <input
+                        type="checkbox"
+                        checked={item.is_completed}
+                        onChange={() => completeTask(item)}
+                      />
+                      {item.title}
+                    </td>
+                    <td>
+                      {new Date(
+                        item.expected_date.seconds * 1000
+                      ).toLocaleDateString("en-SG")}
+                    </td>
+                    <td>
+                      {item.completed_date
+                        ? new Date(
+                            item.completed_date.seconds * 1000
+                          ).toLocaleDateString("en-SG")
+                        : ""}
+                    </td>
+                    <td>{item.priority}</td>
+                    <td>
+                      <button onClick={() => updateTask(item)}>Update</button>
+                      <button onClick={() => deleteTask(item)}>Delete</button>
+                    </td>
+                  </tr>
+                );
+              })
+            : incompletedTasks.map((item) => {
+                return (
+                  <tr
+                    key={item.id}
+                    className={item.is_completed ? "line-through" : ""}
+                  >
+                    <td onClick={() => completeTask(item)}>
+                      <input
+                        type="checkbox"
+                        checked={item.is_completed}
+                        onChange={() => completeTask(item)}
+                      />
+                      {item.title}
+                    </td>
+                    <td>
+                      {new Date(
+                        item.expected_date.seconds * 1000
+                      ).toLocaleDateString("en-SG")}
+                    </td>
+                    <td>
+                      {item.completed_date
+                        ? new Date(
+                            item.completed_date.seconds * 1000
+                          ).toLocaleDateString("en-SG")
+                        : ""}
+                    </td>
+                    <td>{item.priority}</td>
+                    <td>
+                      <button onClick={() => updateTask(item)}>Update</button>
+                      <button onClick={() => deleteTask(item)}>Delete</button>
+                    </td>
+                  </tr>
+                );
+              })}
         </tbody>
       </table>
     </div>

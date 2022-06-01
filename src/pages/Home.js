@@ -16,6 +16,8 @@ function Home() {
   const navigate = useNavigate();
 
   const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
+  const [incompletedTasks, setIncompletedTasks] = useState([]);
   const [displayTasks, setDisplayTasks] = useState([]);
   const [activeLink, setActiveLink] = useState("all");
 

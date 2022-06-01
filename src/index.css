@@ -31,3 +31,7 @@ tbody tr:nth-child(odd) {
 .line-through {
   text-decoration: line-through;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

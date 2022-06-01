@@ -32,16 +32,6 @@ function Home() {
       setTasks(arr);
       setCompletedTasks(arr.filter((item) => item.is_completed === true));
       setIncompletedTasks(arr.filter((item) => item.is_completed === false));
-
-      // if (activeLink === "all") {
-      //   setDisplayTasks(arr);
-      // } else if (activeLink === "complete") {
-      //   const filteredTasks = arr.filter((item) => item.is_completed === true);
-      //   setDisplayTasks(filteredTasks);
-      // } else if (activeLink === "incomplete") {
-      //   const filteredTasks = arr.filter((item) => item.is_completed === false);
-      //   setDisplayTasks(filteredTasks);
-      // }
     });
 
     return () => {
@@ -161,7 +151,10 @@ function Home() {
                     key={item.id}
                     className={item.is_completed ? "line-through" : ""}
                   >
-                    <td onClick={() => completeTask(item)}>
+                    <td
+                      onClick={() => completeTask(item)}
+                      className="cursor-pointer"
+                    >
                       <input
                         type="checkbox"
                         checked={item.is_completed}
@@ -229,8 +222,19 @@ function Home() {
                     </td>
                     <td>{item.priority}</td>
                     <td>
-                      <button onClick={() => updateTask(item)}>Update</button>
-                      <button onClick={() => deleteTask(item)}>Delete</button>
+                      <button
+                        onClick={() => updateTask(item)}
+                        className="btn btn-outline-primary btn-sm"
+                        style={{ marginRight: 5 }}
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={() => deleteTask(item)}
+                        className="btn btn-outline-danger btn-sm"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 );
@@ -263,8 +267,19 @@ function Home() {
                     </td>
                     <td>{item.priority}</td>
                     <td>
-                      <button onClick={() => updateTask(item)}>Update</button>
-                      <button onClick={() => deleteTask(item)}>Delete</button>
+                      <button
+                        onClick={() => updateTask(item)}
+                        className="btn btn-outline-primary btn-sm"
+                        style={{ marginRight: 5 }}
+                      >
+                        Update
+                      </button>
+                      <button
+                        onClick={() => deleteTask(item)}
+                        className="btn btn-outline-danger btn-sm"
+                      >
+                        Delete
+                      </button>
                     </td>
                   </tr>
                 );

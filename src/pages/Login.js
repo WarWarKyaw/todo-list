@@ -25,7 +25,7 @@ function Login() {
 
   return (
     <div style={{ width: 400, margin: "auto" }}>
-      <h1>Login Page</h1>
+      <h3>Login Here</h3>
       <div className="form-group">
         <label htmlFor="email">Email:</label>
         <input

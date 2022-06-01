@@ -39,27 +39,34 @@ function Create() {
   return (
     <div>
       <LogoutBtn />
-      <h1>Create Page</h1>
-      <form onSubmit={submit}>
-        <label htmlFor="title">Title</label>
-        <input
-          id="title"
-          type="text"
-          required
-          placeholder="Enter Title"
-          onChange={(event) => setTitle(event.target.value)}
-          value={title}
-        />{" "}
-        <br />
-        <label htmlFor="expectedDate">Expected Date</label>
-        <input
-          id="expectedDate"
-          type="date"
-          required
-          onChange={(event) => setExpectedDate(event.target.value)}
-          value={expectedDate}
-        />{" "}
-        <br />
+      <form
+        onSubmit={submit}
+        style={{ width: 500, margin: "auto", marginTop: 10 }}
+      >
+        <h3>Create Task</h3>
+        <div className="form-group">
+          <label htmlFor="title">Title</label>
+          <input
+            id="title"
+            type="text"
+            required
+            placeholder="Enter Title"
+            onChange={(event) => setTitle(event.target.value)}
+            value={title}
+            className="form-control"
+          />
+        </div>
+        <div className="form-group" style={{ marginTop: 10, marginBottom: 10 }}>
+          <label htmlFor="expectedDate">Expected Date</label>
+          <input
+            id="expectedDate"
+            type="date"
+            required
+            onChange={(event) => setExpectedDate(event.target.value)}
+            value={expectedDate}
+            className="form-control"
+          />
+        </div>
         <label>Priority</label> <br />
         <input
           type="radio"
@@ -69,7 +76,9 @@ function Create() {
           required
           onChange={(event) => setPriority(event.target.defaultValue)}
         />{" "}
-        <label htmlFor="low">Low</label>
+        <label htmlFor="low" style={{ marginRight: 20 }}>
+          Low
+        </label>
         <input
           type="radio"
           id="medium"
@@ -77,7 +86,9 @@ function Create() {
           value="medium"
           onChange={(event) => setPriority(event.target.defaultValue)}
         />{" "}
-        <label htmlFor="medium">Medium</label>
+        <label htmlFor="medium" style={{ marginRight: 20 }}>
+          Medium
+        </label>
         <input
           type="radio"
           id="high"
@@ -87,7 +98,12 @@ function Create() {
         />{" "}
         <label htmlFor="high">High</label>
         <br />
-        <input type="submit" disabled={loading} />
+        <input
+          type="submit"
+          disabled={loading}
+          className="btn btn-primary"
+          style={{ marginTop: 20 }}
+        />
       </form>
     </div>
   );

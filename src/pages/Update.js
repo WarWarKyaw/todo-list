@@ -117,6 +117,7 @@ function Update() {
           disabled={loading}
           className="btn btn-primary"
           style={{ marginTop: 20 }}
+          value="更新する"
         />
       </form>
     </div>

@@ -62,7 +62,7 @@ function Home() {
   };
 
   const deleteTask = async (item) => {
-    const isConfirm = window.confirm("Are you sure to delete the task?");
+    const isConfirm = window.confirm("このタスクを削除しますか？");
     if (isConfirm) {
       const taskRef = doc(db, "tasks", item.id);
       await deleteDoc(taskRef);

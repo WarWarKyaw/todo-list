@@ -25,26 +25,26 @@ function Login() {
 
   return (
     <div style={{ width: 400, margin: "auto" }}>
-      <h3>Login Here</h3>
+      <h3>システムにログインする</h3>
       <div className="form-group">
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">ログインID:</label>
         <input
           type="text"
           className="form-control"
           id="email"
-          placeholder="Enter username"
+          placeholder="ログインIDを入力してください。"
           required
           onChange={(event) => setEmail(event.target.value)}
           value={email}
         />
       </div>
       <div className="form-group mt-2 mb-3">
-        <label htmlFor="password">Password:</label>
+        <label htmlFor="password">パスワード:</label>
         <input
           type="password"
           className="form-control"
           id="password"
-          placeholder="Enter password"
+          placeholder="パスワードを入力してください。"
           required
           onChange={(event) => setPassword(event.target.value)}
           value={password}
@@ -56,7 +56,7 @@ function Login() {
         onClick={signin}
         disabled={loading}
       >
-        Login
+        ログイン
       </button>
     </div>
   );

@@ -7,6 +7,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  where,
 } from "../firebase-config";
 import { useNavigate } from "react-router-dom";
 import { orderBy } from "firebase/firestore";
@@ -23,19 +24,34 @@ function Home() {
   const [isAlert, setIsAlert] = useState(false);
 
   useEffect(() => {
-    const q = query(collection(db, "tasks"), orderBy("expected_date", "asc"));
+    const tasksRef = collection(db, "tasks");
+    const q = query(tasksRef, orderBy("expected_date", "asc"));
+    const q1 = query(
+      tasksRef,
+      where("is_completed", "==", true),
+      orderBy("completed_date", "desc")
+    );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const arr = [];
       querySnapshot.forEach((doc) => {
         arr.push({ ...doc.data(), id: doc.id });
       });
       setTasks(arr);
-      setCompletedTasks(arr.filter((item) => item.is_completed === true));
+      // setCompletedTasks(arr.filter((item) => item.is_completed === true));
       setIncompletedTasks(arr.filter((item) => item.is_completed === false));
+    });
+
+    const unsubscribeCompletedTasks = onSnapshot(q1, (querySnapshot) => {
+      const arr = [];
+      querySnapshot.forEach((doc) => {
+        arr.push({ ...doc.data(), id: doc.id });
+      });
+      setCompletedTasks(arr);
     });
 
     return () => {
       unsubscribe();
+      unsubscribeCompletedTasks();
     };
   }, [activeLink]);
 
@@ -68,8 +84,8 @@ function Home() {
   };
 
   const remainTasks = (totalTasks) => {
-    if (totalTasks === 0) return "No task left";
-    return `${totalTasks} tasks`;
+    if (totalTasks === 0) return "タスクがありません。";
+    return `${totalTasks} タスク`;
   };
 
   return (
@@ -80,6 +96,7 @@ function Home() {
           type="button"
           className="btn btn-outline-success btn-sm"
           onClick={() => navigate("/create")}
+          style={{ width: 120 }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +108,7 @@ function Home() {
           >
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
           </svg>
-          Add Task
+          タスク登録
         </button>
       </div>
       {isAlert && <Alert />}
@@ -103,7 +120,7 @@ function Home() {
           }`}
           onClick={() => changeLink("all")}
         >
-          All Tasks
+          全タスク
         </button>
         <button
           type="button"
@@ -112,7 +129,7 @@ function Home() {
           }`}
           onClick={() => changeLink("complete")}
         >
-          Completed Tasks
+          完了タスク
         </button>
         <button
           type="button"
@@ -121,7 +138,7 @@ function Home() {
           }`}
           onClick={() => changeLink("incomplete")}
         >
-          Incompleted Tasks
+          未完了タスク
         </button>
       </div>{" "}
       <h4>
@@ -136,11 +153,11 @@ function Home() {
       <table>
         <thead className="text-white" style={{ backgroundColor: "#0D6EFD" }}>
           <tr>
-            <th>Title</th>
-            <th>Expected Date</th>
-            <th>Completed Date</th>
-            <th>Priority</th>
-            <th>Action</th>
+            <th>タイトル</th>
+            <th>予定日</th>
+            <th>完了日</th>
+            <th>優先度</th>
+            <th>作用</th>
           </tr>
         </thead>
         <tbody>
@@ -181,13 +198,13 @@ function Home() {
                         className="btn btn-outline-primary btn-sm"
                         style={{ marginRight: 5 }}
                       >
-                        Update
+                        編集
                       </button>
                       <button
                         onClick={() => deleteTask(item)}
                         className="btn btn-outline-danger btn-sm"
                       >
-                        Delete
+                        削除
                       </button>
                     </td>
                   </tr>
@@ -227,13 +244,13 @@ function Home() {
                         className="btn btn-outline-primary btn-sm"
                         style={{ marginRight: 5 }}
                       >
-                        Update
+                        編集
                       </button>
                       <button
                         onClick={() => deleteTask(item)}
                         className="btn btn-outline-danger btn-sm"
                       >
-                        Delete
+                        削除
                       </button>
                     </td>
                   </tr>
@@ -272,13 +289,13 @@ function Home() {
                         className="btn btn-outline-primary btn-sm"
                         style={{ marginRight: 5 }}
                       >
-                        Update
+                        編集
                       </button>
                       <button
                         onClick={() => deleteTask(item)}
                         className="btn btn-outline-danger btn-sm"
                       >
-                        Delete
+                        削除
                       </button>
                     </td>
                   </tr>

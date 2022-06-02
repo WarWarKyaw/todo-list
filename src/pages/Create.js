@@ -43,21 +43,21 @@ function Create() {
         onSubmit={submit}
         style={{ width: 500, margin: "auto", marginTop: 10 }}
       >
-        <h3>Create Task</h3>
+        <h3>タスクを登録</h3>
         <div className="form-group">
-          <label htmlFor="title">Title</label>
+          <label htmlFor="title">タイトル</label>
           <input
             id="title"
             type="text"
             required
-            placeholder="Enter Title"
+            placeholder="タイトルを入力してください。"
             onChange={(event) => setTitle(event.target.value)}
             value={title}
             className="form-control"
           />
         </div>
         <div className="form-group" style={{ marginTop: 10, marginBottom: 10 }}>
-          <label htmlFor="expectedDate">Expected Date</label>
+          <label htmlFor="expectedDate">予定日</label>
           <input
             id="expectedDate"
             type="date"
@@ -67,7 +67,7 @@ function Create() {
             className="form-control"
           />
         </div>
-        <label>Priority</label> <br />
+        <label>優先度</label> <br />
         <input
           type="radio"
           id="low"
@@ -77,7 +77,7 @@ function Create() {
           onChange={(event) => setPriority(event.target.defaultValue)}
         />{" "}
         <label htmlFor="low" style={{ marginRight: 20 }}>
-          Low
+          低
         </label>
         <input
           type="radio"
@@ -87,7 +87,7 @@ function Create() {
           onChange={(event) => setPriority(event.target.defaultValue)}
         />{" "}
         <label htmlFor="medium" style={{ marginRight: 20 }}>
-          Medium
+          中
         </label>
         <input
           type="radio"
@@ -96,10 +96,11 @@ function Create() {
           value="high"
           onChange={(event) => setPriority(event.target.defaultValue)}
         />{" "}
-        <label htmlFor="high">High</label>
+        <label htmlFor="high">高</label>
         <br />
         <input
           type="submit"
+          value="登録"
           disabled={loading}
           className="btn btn-primary"
           style={{ marginTop: 20 }}

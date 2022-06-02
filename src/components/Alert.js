@@ -6,7 +6,7 @@ export default function Alert() {
       className="alert alert-success"
       style={{ width: 300, position: "absolute", top: 0 }}
     >
-      Task is completed!
+      タスクは完了になりました。
     </div>
   );
 }

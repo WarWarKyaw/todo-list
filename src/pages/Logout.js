@@ -4,9 +4,9 @@ export default function Logout() {
   const origin = window.location.origin;
   return (
     <div>
-      <h3>You logged out from the system.</h3>
+      <h3>ログアウトになりました。</h3>
       <h4 style={{ marginTop: 20 }}>
-        You can <a href={origin}>login</a> here!
+        こちらに<a href={origin}>ログイン</a> できる!
       </h4>
     </div>
   );

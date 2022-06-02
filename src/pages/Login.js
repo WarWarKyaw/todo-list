@@ -1,5 +1,6 @@
 import { auth, signInWithEmailAndPassword } from "../firebase-config";
 import { useState } from "react";
+import Loading from "../components/Loading";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -109,7 +110,7 @@ function Login() {
             onClick={signin}
             disabled={loading}
           >
-            ログイン
+            {loading ? <Loading /> : "ログイン"}
           </button>
         </div>
       </div>

@@ -22,9 +22,7 @@ function Update() {
 
   const submit = async (event) => {
     event.preventDefault();
-    console.log("submit...");
     const isConfirm = window.confirm("Are you sure to update the task?");
-    console.log("isConfirm ", isConfirm);
     if (isConfirm) {
       setLoading(true);
 
@@ -32,7 +30,6 @@ function Update() {
 
       try {
         // Set the "is_completed" field of the task 'item.id'
-        console.log("expe ", expectedDate);
         await updateDoc(taskRef, {
           title,
           priority,
@@ -41,7 +38,6 @@ function Update() {
         setLoading(false);
         navigate("/");
       } catch (error) {
-        console.log(error);
         setLoading(false);
       }
     }

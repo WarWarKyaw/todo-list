@@ -19,8 +19,6 @@ function Login() {
       .catch((error) => {
         setLoading(false);
         alert("Email and Password do not match!");
-        console.log(error.code);
-        console.log(error.message);
       });
   };
 

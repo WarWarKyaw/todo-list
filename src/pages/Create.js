@@ -13,7 +13,6 @@ function Create() {
 
   const submit = async (event) => {
     event.preventDefault();
-    console.log("submit...");
     setLoading(true);
     const data = { title, expectedDate, priority };
 
@@ -25,14 +24,12 @@ function Create() {
         is_completed: false,
       });
       setLoading(false);
-      console.log("Document written with ID: ", docRef.id);
       setTitle("");
       setExpectedDate("");
       setPriority("");
       navigate("/");
     } catch (e) {
       setLoading(false);
-      console.error("Error adding document: ", e);
     }
   };
 

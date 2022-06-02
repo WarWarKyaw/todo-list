@@ -7,7 +7,6 @@ import {
   doc,
   updateDoc,
   deleteDoc,
-  where,
 } from "../firebase-config";
 import { useNavigate } from "react-router-dom";
 import { orderBy } from "firebase/firestore";
@@ -26,11 +25,6 @@ function Home() {
   useEffect(() => {
     const tasksRef = collection(db, "tasks");
     const q = query(tasksRef, orderBy("expected_date", "asc"));
-    const q1 = query(
-      tasksRef,
-      where("is_completed", "==", true),
-      orderBy("completed_date", "desc")
-    );
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const arr = [];
       querySnapshot.forEach((doc) => {
@@ -39,19 +33,19 @@ function Home() {
       setTasks(arr);
       // setCompletedTasks(arr.filter((item) => item.is_completed === true));
       setIncompletedTasks(arr.filter((item) => item.is_completed === false));
-    });
-
-    const unsubscribeCompletedTasks = onSnapshot(q1, (querySnapshot) => {
-      const arr = [];
-      querySnapshot.forEach((doc) => {
-        arr.push({ ...doc.data(), id: doc.id });
+      let sortedArr = [...arr];
+      sortedArr = sortedArr.filter((item) => item.is_completed === true);
+      sortedArr.sort(function (a, b) {
+        return (
+          new Date(b.completed_date.seconds * 1000) -
+          new Date(a.completed_date.seconds * 1000)
+        );
       });
-      setCompletedTasks(arr);
+      setCompletedTasks(sortedArr);
     });
 
     return () => {
       unsubscribe();
-      unsubscribeCompletedTasks();
     };
   }, [activeLink]);
 
